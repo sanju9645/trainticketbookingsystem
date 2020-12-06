@@ -31,8 +31,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-#SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
-SENDGRID_API_KEY = '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'
+SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
+
 
 EMAIL_HOST = 'smtp.sendgrid.net'
 EMAIL_HOST_USER = 'apikey' # this is exactly the value 'apikey'
@@ -160,8 +160,8 @@ STATICFILES_DIRS=[
 ]
 STATIC_ROOT = 'static'
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-
+#EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 MEDIA_ROOT= os.path.join(BASE_DIR, 'static/images')
 MEDIA_URL= "/images/"

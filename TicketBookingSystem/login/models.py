@@ -8,7 +8,7 @@ from profileUpdate.models import *
 import os
 import requests
 from django.dispatch import receiver
-from django.core.mail import send_mail
+from login.views import send_mail
 
 
 @receiver(post_save,sender=User)
@@ -23,14 +23,12 @@ def hear_signal(sender,instance,**kwargs):
             print("Agent creation failed")
         # Send verification mail
         subject='Account activation mail'
-        message='Congatulations,your account is activated.Please login from this link to continue  ' + get_password_reset_url(instance)
+        message='Congatulations,\n Your account is activated.\nPlease login from this link to continue\n  ' + get_password_reset_url(instance)
         #response = send_simple_message(instance.username, subject, message)
         #print(response.status_code, response.text)
         send_mail(subject, 
-                message,
-                settings.FROM_EMAIL, 
-                [instance.username], 
-                fail_silently=False)
+                message, 
+                instance.username)
 
 # def send_simple_message(to, subject, message):
 # 	return requests.post(

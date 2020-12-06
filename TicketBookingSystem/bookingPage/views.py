@@ -18,7 +18,9 @@ def bookingPage(request):
     route_list=Route.objects.all()
     stations = []
     for route in route_list:
-        stations.extend(route.route_order.split(','))
+        stations.extend(route.route_order.split(','))#it convert comma seperated string to list
+        #append used to add a single value to a list
+        #extend used to add multiple values to a list
     user=request.user
     agent = Agent.objects.filter(user=user)
     if not agent.exists():
@@ -27,6 +29,8 @@ def bookingPage(request):
         maxSeats = agent.last().maxSeats
     
     routes=','.join(stations)
+    #convert list to comma seperated string
+    
     context={'stations':stations,'maxSeats':maxSeats,'routes':routes}
     return render(request, 'book-ticket.html',context)
 
@@ -38,12 +42,14 @@ def getSeat(window, middle, aisle,gender,priority=AISLE):
         seats = middle + aisle + window
     else:
         seats = window + middle + aisle
+        
     if len(seats) <= 0:
         return -1,-1
     
     key = 'female_support'
     if gender=='M':
         key = 'male_support'
+        
     seat=list(filter(lambda x :x[key],seats))
     if len(seat) <= 0:
             return -1,-1
@@ -66,6 +72,7 @@ def getVacantSeats(journey_start, journey_end, start_date):
     
     # exclude all the bookings that does not affect my booking
     reserved_seats = reserved_seats.exclude(journey_end = journey_start).exclude(journey_start=journey_end)
+    
     seat_structure = [{'seat_no': i+1, 'vacant': True, 'male_support': True, 'female_support': True} for i in range(capacity)]
     
     for seat in reserved_seats:#query set
@@ -86,9 +93,9 @@ def getVacantSeats(journey_start, journey_end, start_date):
             positive_key = 'female_support'
             negative_key = 'male_support'
 
-        seat_structure[neighbour[0]-1][positive_key] = True and seat_structure[neighbour[0]-1][positive_key]
+        #seat_structure[neighbour[0]-1][positive_key] = True and seat_structure[neighbour[0]-1][positive_key]
         seat_structure[neighbour[0]-1][negative_key] = False
-        seat_structure[neighbour[1]-1][positive_key] = True and seat_structure[neighbour[1]-1][positive_key]
+        #seat_structure[neighbour[1]-1][positive_key] = True and seat_structure[neighbour[1]-1][positive_key]
         seat_structure[neighbour[1]-1][negative_key] = False
         
     

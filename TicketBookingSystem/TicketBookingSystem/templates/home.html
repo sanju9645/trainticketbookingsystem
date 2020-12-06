@@ -39,7 +39,8 @@
                                 {% for seat in seats %}
                                     <td style="background-color: {{seat.color}}">
                                         {{forloop.counter}}<br/>
-                                        {% if seat.vacant %}
+                                        <!-- forloop.counter starts from index1, forloop.counter0 strats from index 0 -->
+                                        {% if seat.vacant %} 
                                         {% else %}
                                             {% for p in seat.passengers %}
                                                 <span style="color: {{p.color}}">{{p.start}}-{{p.end}}</span><br/>

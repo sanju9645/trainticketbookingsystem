@@ -248,6 +248,7 @@
                   journey_info['journey_start'] = from;
                   journey_info['journey_end'] = to;
                 }
+
                 // add passenger details to journey_info
                 journey_info['passengers'].push({
                   'name': name,
@@ -255,12 +256,14 @@
                   'sex': sex
                 });
             }
-            
+        
         }
 
         function save_booking(){
           const csrftoken = document.querySelector('input[name="csrfmiddlewaretoken"]').value;
+
             // sending json request
+            //fetch function returns a promise
             fetch('/booking/save/', {
               method : 'POST',
               headers: {
@@ -337,7 +340,7 @@
           }
           ticket_table.appendChild(ticket_body);
           html.appendChild(ticket_table);
-          console.log(html)
+          //console.log(html)
           return html;
         }
     </script>

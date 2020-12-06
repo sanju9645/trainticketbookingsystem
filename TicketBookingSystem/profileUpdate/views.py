@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from .forms import AgentProfileForm
+#from .forms import AgentProfileForm
 from .models import Agent
 from django.core.files.storage import FileSystemStorage
 # Create your views here.
@@ -26,13 +26,13 @@ def updateProfilePage(request):
         phone=request.POST.get('phone')
         address=request.POST.get('address')
         dob=request.POST.get('dob')
-        profile_pic=request.POST.get('profilePicture')
+        profile_pic=request.POST.get('profilePicture')#name of profile picture
 
-        profile_pic = request.FILES['profilePicture']
-        fs = FileSystemStorage()
-        filename = fs.save(profile_pic.name, profile_pic)
+        profile_pic = request.FILES['profilePicture']#profile picture
+        fs = FileSystemStorage()    #fs object will interact with file system(hard disk)
+        filename = fs.save(profile_pic.name, profile_pic)#MEDIA_ROOT folder
 
-        print(profile_pic)
+        #print(profile_pic)
         a = Agent.objects.filter(user=request.user)
         if a.exists():
             a = a.last()
@@ -42,13 +42,14 @@ def updateProfilePage(request):
             a.phone=phone
             a.profile_pic=profile_pic
             a.save()
-        if a:
-            print("created")
-        else:
-            print("not created")
+        # if a:
+        #     print("created")
+        # else:
+        #     print("not created")
         return redirect("showProfile")
         # else:
         #     return redirect("/agent/profile/update?message=Invalid Entries. Try again")
     else:
-        agentForm = AgentProfileForm()
-        return render(request, "update-profile.html", {'form': agentForm})
+        #agentForm = AgentProfileForm()
+        #return render(request, "update-profile.html", {'form': agentForm})
+        return render(request, "update-profile.html", {})

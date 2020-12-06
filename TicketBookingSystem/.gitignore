@@ -45,4 +45,4 @@ env/
 .mypy_cache/
 
 # vscode
-.vscode/
+.vscode/sendgrid.env
