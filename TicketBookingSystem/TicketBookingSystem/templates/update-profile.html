@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block title %}
+Profile Update
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12"></div>
+            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                <!-- <form method="POST" action="{% url 'updateProfile' %}">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit" class="btn btn-primary">Save Details</button>
+                </form> -->
+                <h1>Update your details</h1>
+                <br>
+                <form method="POST" action='{% url 'updateProfile' %}' enctype="multipart/form-data">{% csrf_token %}
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" class="form-control" id="name" name="name">
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone</label>
+                        <input type="text" class="form-control" id="phone" name="phone">
+                    </div>
+                    <div class="form-group">
+                        <label for="address">Address</label>
+                        <textarea class="form-control" id="address" name='address' rows="3"></textarea>
+                      </div>
+                      <div class="form-group">
+                        <label for="profilePicture">Upload your profile picture</label>
+                        <input type="file" class="form-control-file" name="profilePicture" id="profilePicture">
+                      </div>
+                      <div class="form-group">  
+                        <label for="dob" class="col-12 col-form-label">Date of Birth</label>
+                        <div class="col-10">
+                          <input class="form-control" type="date" value="yyyy-mm-dd" id="dob" name='dob'>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Update</button>
+                      </div>
+                      
+                  </form>
+
+            </div>
+        </div>
+    </div>
+
+  
+{% endblock %}
+

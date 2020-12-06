@@ -1,0 +1,64 @@
+{% extends 'base.html' %} 
+{% load static %}
+{% block title %} 
+    Home 
+{% endblock %} 
+
+{% block style %}
+    <link rel="stylesheet" href="{% static 'css/home_page_style.css' %}" />
+{% endblock %} 
+
+{% block body %}
+    <div class="container mt-5">
+        <div id="content">
+            <div class="container">
+                <form action="/" method="POST">
+                {% csrf_token %}
+                <div class="row">
+                        <div class="col-lg-2 col-md-2 col-sm-6 col-xs-6"></div>
+                        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6">
+                            <input type="date" class="form-control"  id="date" name="date" value="{{booking_date}}" required>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6">
+                            <button type="submit" class="btn btn-primary">Check Seats Availability</button>
+                        </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4"></div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                        <div style=" display: inline-block; margin: 50px 10px"><div style="width: 20px; height: 20px; background: #4287f5; display: inline-block;"></div>Male</div>
+                        <div style=" display: inline-block; margin: 50px 10px"><div style="width: 20px; height: 20px; background: #f542b9; display: inline-block;"></div>Female</div>
+                    </div>
+                </div>
+                </form>
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <table class="table1" style="width: 80%; margin: 3vh auto;">
+                            <tbody>
+                            <tr>
+                                {% for seat in seats %}
+                                    <td style="background-color: {{seat.color}}">
+                                        {{forloop.counter}}<br/>
+                                        {% if seat.vacant %}
+                                        {% else %}
+                                            {% for p in seat.passengers %}
+                                                <span style="color: {{p.color}}">{{p.start}}-{{p.end}}</span><br/>
+                                            {% endfor%}
+                                        {% endif %}
+                                    </td>
+                                    {% if forloop.counter|divisibleby:6 %}
+                                    </tr>
+                                    {% elif forloop.counter|divisibleby:3 %}
+                                        <td style="width: 50px"></td>
+                                    {% endif %}
+                                {% endfor %}
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

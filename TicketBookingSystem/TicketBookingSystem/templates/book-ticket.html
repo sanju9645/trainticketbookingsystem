@@ -1,0 +1,344 @@
+{% extends 'base.html' %} 
+{% load static %}
+{% block title %} 
+    Bookin Page 
+{% endblock %} 
+
+{% block body %}
+
+    <div class="container">
+    <div class="container">
+    <form method="POST" name="addUsers">
+      <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="from">From</label>
+            <select id="from" name="from" class="form-control" onfocusout="splitDestination()">
+              <option value="0" selected>Select Station</option>
+              {% for station in stations %}
+              
+                <option >{{station}}</option>
+              {% endfor %}
+            </select>
+        </div>
+        <div class="form-group col-md-4">
+            <label for="to">TO</label>
+            <select id="to" name="to" class="form-control">
+              <option value="0" selected>Select Station</option>
+            </select>
+        </div>
+        <div class="col">
+          <label for="date" class="col-sm-12 col-form-label">Journey Date</label>
+        <input type="date" class="form-control"  id="date" name="date" required >
+      </div>
+    </div>
+        <div class="form-row">
+            <div class="col">
+                <label for="name" class="col-sm-2 col-form-label">Name</label>
+              <input type="text" class="form-control"  id="name" name="name" required >
+            </div>
+            <div class="col">
+                <label for="age" class="col-sm-2 col-form-label">Age</label>
+              <input type="number" class="form-control" placeholder="Age" id="age" name="age" required pattern=".{2}" title="Please enter a valid age" min="1" maxlength="2" >
+            </div>
+        </div>
+
+        <br>
+        <fieldset class="form-group">
+            <div class="row">
+              <legend class="col-form-label col-sm-2 pt-0">Gender</legend>
+              <div class="col-sm-10">
+  
+              <div class="form-row">
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="gender" id="gender2" value="M" selected>
+                  <label class="form-check-label" for="male">
+                    Male
+                  </label>
+                </div>
+  
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="gender" id="gender1" value="F">
+                  <label class="form-check-label" for="gender">
+                    Female
+                  </label>
+                </div>
+              </div>
+              </div>
+            </div>
+          </fieldset>
+  
+        
+        <div class="form-group row">
+          <div class="col-sm-10">
+              <input type="button" class="btn btn-secondary" name="add" value="Add More" onclick="addPerson()" >
+            <button type="button" class="btn btn-primary" disabled id="submit" onclick="save_booking()">Submit</button>
+          </div>
+        </div>
+    </div>
+        
+        <div class="container">
+                <table class="table table-striped" id="tb1">
+                    <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Age</th>
+                        <th scope="col">Sex</th>
+                        <th scope="col">From</th>
+                        <th scope="col">To</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Amount</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    
+                    </tbody>
+                </table>
+        </div>
+
+        <div class="total" id="total_amount" style="width: 100%; display: inline-block; font-size: 3vh; color: #000; align-items: center">
+          <!-- <span>Total Amount: ₹ 0</span>  -->
+          <span id="total_amount">Total Amount: ₹ 0</span>
+        </div>
+
+      </form>
+    </div>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+
+
+
+    var route = "{{routes}}".split(",");
+    var journey_info = {
+      'start_date': '',
+      'journey_start': '',
+      'journey_end': '', 
+      'passengers': []
+    };
+    //console.log(route)
+
+    function splitDestination(){
+      var from=document.addUsers.from.value;
+
+      fromIndex=route.indexOf(from)
+      if(fromIndex==-1){
+        return
+      }
+      var to = route.slice(fromIndex+1)
+
+      var select=document.getElementById('to');
+      select.innerHTML = '<option value="0" selected>Select Station</option>'
+      for(let i of to){
+        select.innerHTML += `<option value="${i}">${i}</option>`
+      }
+
+    }
+
+      function validateData(){
+        var from=document.addUsers.from.value;
+        var to=document.addUsers.to.value;
+        if(from==to){
+          alert('Source and Destination should be diffrent !')
+          return false
+        }
+        if(to==0 || from==0){
+          alert('Please select a station !')
+          return false
+        }
+
+        var date=new Date(document.addUsers.date.value)
+        
+        var today=new Date()
+        if(document.addUsers.date.value==''){
+          alert('Please select a Journey Date !')
+          return false
+        }
+        if((date-today)<0){
+          alert('Invalid Date !')
+          return false
+        }
+
+        var name=document.addUsers.name.value;
+        var letters = /^[A-Za-z\s]+$/;
+        if(!name.match(letters)){
+          alert('Enter a valid name !')
+          return false
+        }
+
+        var age=parseInt(document.addUsers.age.value)
+        if(!Number.isInteger(age) || age<=0 || age>=100){
+          alert('Invalid Age !')
+          return false
+        }
+        return true
+      }
+      
+        let count=0
+        function addPerson(){
+            if(count>=parseInt("{{maxSeats}}")){
+              alert("maximum limit reached");
+              return;
+            }
+
+            if(!validateData()){
+                return
+            }
+
+            if((document.getElementById("name").value != ' ') && (document.getElementById("age").value != ' ') ){
+                count+=1
+                var name=document.addUsers.name.value;
+                var age=document.addUsers.age.value;
+                var sex=document.addUsers.gender.value;
+                var from=document.addUsers.from.value;
+                var to=document.addUsers.to.value;
+                var date=document.addUsers.date.value;
+                // console.log(typeof(date))
+                // var amount=100;
+                source=route.indexOf(from)
+                destination=route.indexOf(to)
+                var amount=(destination-source)*100
+                
+                var tr=document.createElement('tr');
+
+                var td1=tr.appendChild(document.createElement('td'))
+                var td2=tr.appendChild(document.createElement('td'))
+                var td3=tr.appendChild(document.createElement('td'))
+                var td4=tr.appendChild(document.createElement('td'))
+                var td5=tr.appendChild(document.createElement('td'))
+                var td6=tr.appendChild(document.createElement('td'))
+                var td7=tr.appendChild(document.createElement('td'))
+                var td8=tr.appendChild(document.createElement('td'))
+
+                td1.innerHTML=count
+                td2.innerHTML=name
+                td3.innerHTML=age
+                td4.innerHTML=sex
+                td5.innerHTML=from
+                td6.innerHTML=to
+                td7.innerHTML=date
+                td8.innerHTML=amount
+                //td8.innerHTML=amount*count
+                document.getElementById("total_amount").innerText ='Total Amount ₹'+ amount * count;
+
+                document.getElementById('tb1').appendChild(tr)
+
+                document.getElementById("name").value=' '
+                document.getElementById("age").value=' '
+                //document.getElementById("gender").value=' '
+                document.addUsers.gender.value=' '
+                // document.getElementById("from").value=' '
+                // document.getElementById("date").value=' '
+                // document.getElementById("to").value=' ' 
+
+                // enable submit button
+                document.getElementById("submit").disabled = false
+
+                // disable entry in from, to and date
+                document.getElementById("from").disabled = true
+                document.getElementById("to").disabled = true
+                document.getElementById("date").disabled = true
+
+                // add details to journey_info
+                if(journey_info['start_date'].length == 0){
+                  journey_info['start_date'] = date;
+                  journey_info['journey_start'] = from;
+                  journey_info['journey_end'] = to;
+                }
+                // add passenger details to journey_info
+                journey_info['passengers'].push({
+                  'name': name,
+                  'age': age,
+                  'sex': sex
+                });
+            }
+            
+        }
+
+        function save_booking(){
+          const csrftoken = document.querySelector('input[name="csrfmiddlewaretoken"]').value;
+            // sending json request
+            fetch('/booking/save/', {
+              method : 'POST',
+              headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrftoken
+              },
+              body: JSON.stringify(journey_info)
+            })
+            .then(res=>{
+              if(res.ok){
+                return res.json();
+              }else{
+                throw new Error("Something went wrong");
+              }
+            })
+            .then(res=>{
+              if(res['status'] != 1){
+                alert("Could not allocate seats for any passenger");
+                return;
+              }
+              let booking_details = res['booking_info'];
+              // create new tab with ticket details table
+              let ticket_html = prepare_ticket(booking_details);
+              let ticket_tab = window.open();
+              ticket_tab.document.write(ticket_html.outerHTML);
+              window.location.href="/";
+            })
+            .catch(error=>{
+              console.log(error);
+            });
+        }
+
+        function prepare_ticket(booking_details){
+          let html = document.createElement('html');
+          let style_sec = document.createElement('style');
+          style_sec.innerHTML = `table {
+                                  font-family: Arial, Helvetica, sans-serif;
+                                  border-collapse: collapse;
+                                  width: 50%;
+                                  margin: 10vh auto
+                                }
+
+                                table td, table th {
+                                  border: 1px solid #ddd;
+                                  padding: 8px;
+                                }
+
+                                table tr:nth-child(even){background-color: #f2f2f2;}
+                                table th {
+                                  padding-top: 12px;
+                                  padding-bottom: 12px;
+                                  text-align: left;
+                                  background-color: #4CAF50;
+                                  color: white;
+                                }`;
+          html.appendChild(style_sec);
+          let ticket_table = document.createElement("table");
+          ticket_table.style = "border: 1px solid #000"
+          ticket_table.innerHTML += "<thead><th>#</th><th>Passenger Name</th><th>Age</th><th>Gender</th><th>Seat No</th></thead>";
+          let ticket_body = document.createElement("tbody");
+          let count = 1;
+          for(let passenger of booking_details){
+            let row = document.createElement("tr");
+            let seat_no = passenger['seat_no'];
+            if( parseInt(seat_no) <= 0)
+              seat_no = "No Seat Available";
+            row.innerHTML += `<td>${count}</td>
+                            <td>${passenger['name']}</td>
+                            <td>${passenger['age']}</td>
+                            <td>${passenger['sex']}</td>
+                            <td>${seat_no}</td>`;
+            ticket_body.appendChild(row);
+          }
+          ticket_table.appendChild(ticket_body);
+          html.appendChild(ticket_table);
+          console.log(html)
+          return html;
+        }
+    </script>
+{% endblock %} 

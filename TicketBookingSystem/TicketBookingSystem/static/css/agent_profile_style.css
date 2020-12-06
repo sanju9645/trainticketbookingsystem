@@ -1,0 +1,6 @@
+.profilepic{
+    height: 30vh; 
+    width: 30vh !important; 
+    border-radius: 50%; 
+    margin: 5vh auto;
+}
