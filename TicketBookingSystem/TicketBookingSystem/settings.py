@@ -34,8 +34,8 @@ ALLOWED_HOSTS = ['*']
 #SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'bookyourticketsapp@gmail.com' # this is exactly the value 'apikey'
-EMAIL_HOST_PASSWORD = 'byta1234'
+EMAIL_HOST_USER = 'your mail id' 
+EMAIL_HOST_PASSWORD = 'your password'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
