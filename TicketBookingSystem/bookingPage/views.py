@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 
@@ -156,7 +156,6 @@ def allocateSeats(passengers_list, seat_structure):
 def saveBooking(request):
     if request.method != "POST":
         return redirect("ticketBooking")
-
     booking_details = json.loads(request.body.decode('utf-8'))
     passengers_list = booking_details['passengers']
     journey_start = booking_details['journey_start']
@@ -166,7 +165,6 @@ def saveBooking(request):
     booking_result = allocateSeats(passengers_list, seat_structure)
     # save the new bookings 
     for booking in booking_result:
-        
         if booking['seat_no'] <= 0:
             continue
         seat_no = booking['seat_no']

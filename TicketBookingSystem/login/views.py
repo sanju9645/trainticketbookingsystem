@@ -13,8 +13,8 @@ from datetime import datetime
     # using SendGrid's Python Library
 # https://github.com/sendgrid/sendgrid-python
 import os
-from sendgrid import SendGridAPIClient
-from sendgrid.helpers.mail import Mail
+#from sendgrid import SendGridAPIClient
+#from sendgrid.helpers.mail import Mail
 # Create your views here.
 
 #if the request is not autherized it will reidrect to auth page
@@ -32,7 +32,7 @@ def home(request):
             bookings = Bookings.objects.all()
             date_str = datetime.today().strftime("%Y-%m-%d")#datetime.today() return today date
             #strftime()-string formate time converts date object to string
-            if request.method == "POST":
+            if request.method == "POST" :
                 date_str = request.POST.get('date')
                 
             date = datetime.strptime(date_str, '%Y-%m-%d')
@@ -85,21 +85,22 @@ def get_password_reset_url(user):
     token = PasswordResetTokenGenerator().make_token(user)
     reset_url_args = {'uidb64': base64_encoded_id, 'token': token}
     reset_path = reverse('password_reset_confirm', kwargs=reset_url_args)
-    reset_url = f'{settings.CURRENT_HOST}{reset_path}'
+    #reset_url = f'{settings.CURRENT_HOST}{reset_path}'
+    reset_url = 'https://trainticketbookingsystem.herokuapp.com'+reset_path
     return reset_url
 
 
-def send_mail(subject,message,to):
-    message = Mail(
-        from_email='bookyourticketsapp@gmail.com',
-        to_emails=to,
-        subject=subject,
-        html_content=message)
-    try:
-        sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
-        response = sg.send(message)
-        print(response.status_code)
-        print(response.body)
-        print(response.headers)
-    except Exception as e:
-        print(e)
+# def send_mail(subject,message,to):
+#     message = Mail(
+#         from_email='bookyourticketsapp@gmail.com',
+#         to_emails=to,
+#         subject=subject,
+#         html_content=message)
+#     try:
+#         sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
+#         response = sg.send(message)
+#         print(response.status_code)
+#         print(response.body)
+#         print(response.headers)
+#     except Exception as e:
+#         print(e)

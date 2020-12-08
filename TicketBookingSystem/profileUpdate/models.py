@@ -10,7 +10,7 @@ class Agent(models.Model):
     phone = models.CharField(max_length=200, null=True,blank=True)
     address = models.CharField(max_length=500, null=True,blank=True)
     profile_pic = models.ImageField(null=True, blank=True)
-    dob = models.DateTimeField(null=True,blank=True)
+    dob = models.DateField(null=True,blank=True)
     maxSeats = models.PositiveIntegerField(default=0)
     
     def __str__(self):

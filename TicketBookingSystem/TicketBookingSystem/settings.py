@@ -31,15 +31,14 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
-
-
-EMAIL_HOST = 'smtp.sendgrid.net'
-EMAIL_HOST_USER = 'apikey' # this is exactly the value 'apikey'
-EMAIL_HOST_PASSWORD = SENDGRID_API_KEY
+#SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'bookyourticketsapp@gmail.com' # this is exactly the value 'apikey'
+EMAIL_HOST_PASSWORD = 'byta1234'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-FROM_EMAIL='bookyourticketsdjango@gmail.com'
+
 
 CURRENT_HOST='http://127.0.0.1:8000'
 # Application definition
@@ -161,7 +160,7 @@ STATICFILES_DIRS=[
 STATIC_ROOT = 'static'
 
 #EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+#EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 MEDIA_ROOT= os.path.join(BASE_DIR, 'static/images')
 MEDIA_URL= "/images/"

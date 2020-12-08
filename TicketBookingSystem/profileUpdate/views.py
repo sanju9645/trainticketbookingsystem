@@ -41,6 +41,7 @@ def updateProfilePage(request):
             a.address=address
             a.phone=phone
             a.profile_pic=profile_pic
+            a.dob=dob
             a.save()
         # if a:
         #     print("created")
